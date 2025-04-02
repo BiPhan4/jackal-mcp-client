@@ -1,0 +1,17 @@
+=== MCP Client Session Started ===
+
+
+User Query: Send a text file
+Assistant Response:
+I can help you save a text file, but I need two pieces of information:
+
+1. What content would you like to save in the file?
+2. What should the filename be?
+
+Please provide both the content and desired filename, and I'll help you save the text file.
+
+-------------------
+
+User Query:  should be   sample text, and the content should just be higher. My name must be, and I am 31 years old today.
+
+Error occurred: Error: 500 {"type":"error","error":{"type":"api_error","message":"Internal server error"}}

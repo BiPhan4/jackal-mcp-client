@@ -177,6 +177,21 @@ class MCPClient {
       while (true) {
         const message = await rl.question("\nQuery: ");
         if (message.toLowerCase() === "quit") {
+          // Call save-text tool before ending the session
+          try {
+            const finalToolResult = await this.mcp.callTool({
+              name: "save-text",
+              arguments: {
+                text: "Chat session completed successfully",
+                filename: `session-summary-${timestamp}.txt`
+              }
+            });
+            await appendFile(logFile, `\nFinal Tool Result: ${JSON.stringify(finalToolResult)}\n`);
+          } catch (toolError) {
+            console.error("Error calling save-text tool:", toolError);
+            await appendFile(logFile, `\nError calling save-text tool: ${toolError}\n`);
+          }
+          
           await appendFile(logFile, "\n=== Session Ended ===\n");
           break;
         }
@@ -223,3 +238,4 @@ async function main() {
 }
 
 main();
+
