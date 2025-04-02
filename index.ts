@@ -239,3 +239,8 @@ async function main() {
 
 main();
 
+// save convo with AI to a single txt file 
+// at end of chat loop, save entire convo to data/text_store.db
+// upon init, load all data from text_store.db into AI context 
+
+
