@@ -7,6 +7,8 @@ import {
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import readline from "readline/promises";
+import { appendFile } from "fs/promises";
+import { join } from "path";
 
 import dotenv from "dotenv";
 
@@ -163,18 +165,35 @@ class MCPClient {
       output: process.stdout,
     });
 
+    // Create log file with timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const logFile = join(process.cwd(), `chat-log-${timestamp}.txt`);
+
     try {
       console.log("\nMCP Client Started!");
       console.log("Type your queries or 'quit' to exit.");
+      await appendFile(logFile, "=== MCP Client Session Started ===\n\n");
 
       while (true) {
         const message = await rl.question("\nQuery: ");
         if (message.toLowerCase() === "quit") {
+          await appendFile(logFile, "\n=== Session Ended ===\n");
           break;
         }
+
+        // Log the user's query
+        await appendFile(logFile, `\nUser Query: ${message}\n`);
+
         const response = await this.processQuery(message);
         console.log("\n" + response);
+
+        // Log the response
+        await appendFile(logFile, `Assistant Response:\n${response}\n`);
+        await appendFile(logFile, "\n-------------------\n");
       }
+    } catch (error) {
+      console.error("Error during chat:", error);
+      await appendFile(logFile, `\nError occurred: ${error}\n`);
     } finally {
       rl.close();
     }
