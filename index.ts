@@ -112,6 +112,9 @@ class MCPClient {
         const toolName = content.name;
         const toolArgs = content.input as { [x: string]: unknown } | undefined;
 
+        console.log("Calling tool:", toolName);
+        console.log("With arguments:", toolArgs);
+
         const result = await this.mcp.callTool({
           name: toolName,
           arguments: toolArgs,
